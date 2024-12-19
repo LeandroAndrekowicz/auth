@@ -20,29 +20,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="auth" layers="0" rect-visible="true" fill-color="#70e15e" name-color="#31363b">
 </schema>
 
-<table name="users" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
+<usertype name="roles_enum" configuration="enumeration">
 	<schema name="auth"/>
 	<role name="postgres"/>
-	<position x="260" y="260"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<column name="username" not-null="true">
-		<type name="character varying" length="0"/>
-	</column>
-	<column name="login" not-null="true">
-		<type name="character varying" length="0"/>
-	</column>
-	<column name="password" not-null="true">
-		<type name="character varying" length="0"/>
-	</column>
-	<column name="active" not-null="true" default-value="true">
-		<type name="boolean" length="0"/>
-	</column>
-	<constraint name="users_pk" type="pk-constr" table="auth.users">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+	<enumeration label="ADMIN"/>
+	<enumeration label="COMMON"/>
+</usertype>
 
 <table name="sessions" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
 	<schema name="auth"/>
@@ -64,6 +47,33 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="serial" length="0"/>
 	</column>
 	<constraint name="tokens_pk" type="pk-constr" table="auth.tokens">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="users" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="auth"/>
+	<role name="postgres"/>
+	<position x="260" y="260"/>
+	<column name="id" not-null="true">
+		<type name="serial" length="0"/>
+	</column>
+	<column name="username" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="active" not-null="true" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="role" not-null="true">
+		<type name="auth.roles_enum" length="0"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" table="auth.users">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
