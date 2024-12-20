@@ -1,5 +1,6 @@
+import { SessionsEntity } from "src/sessions/models/entities/sessions.entity";
 import { RolesEnum } from "src/shared/enums/roles.enum";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'users', schema: process.env.DB_PG_SCHEMA})
 export class UsersEntity {
@@ -20,4 +21,13 @@ export class UsersEntity {
 
     @Column({name: 'role', type: 'enum', enum: RolesEnum, nullable: false, unique: false, default: RolesEnum.COMMON})
     role: RolesEnum;
+
+    @Column({name: 'first_access', type: 'boolean', nullable: false, unique: false, default: true})
+    firstAccess: boolean;
+
+    @Column({name: 'tfa_secret', type: 'character varying', nullable: true, unique: true})
+    tfaSecret: string;
+
+    @OneToMany(() => SessionsEntity, (session) => session.user)
+    sessions: SessionsEntity[];
 }

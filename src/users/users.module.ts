@@ -5,6 +5,8 @@ import { UsersTypeOrmRepository } from "./repositories/users.repository";
 import { FindUserByLoginService } from "./services/find-user-by-login/find-user-by-login.service";
 import { RegisterUserController } from "./services/register-user/register-user.controller";
 import { RegisterUserService } from "./services/register-user/register-user.service";
+import { UpdateUserFirstAccessService } from "./services/update-user-first-access/update-user-first-access.service";
+import { UpdateUserSecretService } from "./services/update-user-secret/update-user-secret.service";
 
 @Module({
     imports: [
@@ -17,11 +19,17 @@ import { RegisterUserService } from "./services/register-user/register-user.serv
             useClass: UsersTypeOrmRepository
         },
         RegisterUserService,
-        FindUserByLoginService
+        FindUserByLoginService,
+        UpdateUserSecretService,
+        UpdateUserFirstAccessService
     ],
     controllers: [
         RegisterUserController
     ],
-    exports: []
+    exports: [
+        FindUserByLoginService,
+        UpdateUserSecretService,
+        UpdateUserFirstAccessService
+    ]
 })
 export class UsersModule{}

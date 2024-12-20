@@ -1,4 +1,5 @@
 import { BadRequestException, HttpException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { UsersEntity } from "src/users/models/entities/users.entity";
 import { UsersTypeOrmRepository } from "src/users/repositories/users.repository";
 
 @Injectable()
@@ -7,15 +8,15 @@ export class FindUserByLoginService {
         private readonly usersTypeOrmRepository: UsersTypeOrmRepository
     ) {}
 
-    async execute(userLogin: string): Promise<boolean> {
+    async execute(userLogin: string, isLogin?: boolean): Promise<UsersEntity> {
         try {
             const user = await this.usersTypeOrmRepository.findByLogin(userLogin);
 
-            if(user) {
+            if(user && !isLogin) {
                 throw new BadRequestException('Esse login já está sendo utilizado, por favor escolha outro!');
             }
 
-            return true;
+            return user;
         } catch (error) {
             throw error instanceof HttpException
             ? error

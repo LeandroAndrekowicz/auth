@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { PostgresTypeOrmConfigService } from './config/postgres.config';
+import { SessionsModule } from './sessions/sessions.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -13,7 +15,9 @@ import { UsersModule } from './users/users.module';
       useClass: PostgresTypeOrmConfigService,
       inject: [PostgresTypeOrmConfigService]
     }),
-    UsersModule
+    UsersModule,
+    AuthModule,
+    SessionsModule,
   ],
   controllers: [],
   providers: [],
