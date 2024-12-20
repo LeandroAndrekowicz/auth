@@ -27,31 +27,40 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<enumeration label="COMMON"/>
 </usertype>
 
-<table name="sessions" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
+<table name="sessions" layers="0" collapse-mode="1" max-obj-count="8" z-value="0">
 	<schema name="auth"/>
 	<role name="postgres"/>
 	<position x="720" y="220"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
+	<column name="token">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="refresh_token">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="browser">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="host">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="created_at" not-null="true" default-value="current_timestamp">
+		<type name="timestamptz" length="0"/>
+	</column>
 	<constraint name="sessions_pk" type="pk-constr" table="auth.sessions">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-</table>
 
-<table name="tokens" layers="0" collapse-mode="2" max-obj-count="1" z-value="0">
-	<schema name="auth"/>
-	<role name="postgres"/>
-	<position x="740" y="400"/>
-	<column name="id" not-null="true">
-		<type name="serial" length="0"/>
-	</column>
-	<constraint name="tokens_pk" type="pk-constr" table="auth.tokens">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+	<customidxs object-type="column">
+		<object name="id_users" index="6"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="users_fk" index="1"/>
+	</customidxs></table>
 
-<table name="users" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+<table name="users" layers="0" collapse-mode="1" max-obj-count="9" z-value="0">
 	<schema name="auth"/>
 	<role name="postgres"/>
 	<position x="260" y="260"/>
@@ -73,9 +82,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="role" not-null="true">
 		<type name="auth.roles_enum" length="0"/>
 	</column>
+	<column name="first_access" not-null="true" default-value="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="tfa_secret">
+		<type name="character varying" length="0"/>
+	</column>
 	<constraint name="users_pk" type="pk-constr" table="auth.users">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+	<constraint name="uk_login" type="uq-constr" table="auth.users">
+		<columns names="login" ref-type="src-columns"/>
+	</constraint>
 </table>
+
+<relationship name="users_has_many_sessions" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#ada42f"
+	 src-table="auth.users"
+	 dst-table="auth.sessions"
+	 src-required="true" dst-required="false"/>
 
 </dbmodel>
